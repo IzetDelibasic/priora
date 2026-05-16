@@ -4,7 +4,7 @@ from app.routes import chat, health
 
 app = FastAPI(
     title="Priora AI Agent API",
-    description="Backend za AI agenta - takmičarski projekat",
+    description="Backend for AI agent - competition project",
     version="1.0.0",
 )
 

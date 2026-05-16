@@ -17,7 +17,10 @@ export interface ChatResponse {
   session_id: string;
 }
 
-export async function sendMessage(message: string, sessionId: string): Promise<string> {
+export async function sendMessage(
+  message: string,
+  sessionId: string,
+): Promise<string> {
   const payload: ChatRequest = { message, session_id: sessionId };
   const { data } = await axios.post<ChatResponse>(`${API_BASE}/chat`, payload);
   return data.response;

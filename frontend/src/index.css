@@ -1,4 +1,6 @@
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -6,7 +8,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #0f172a;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 

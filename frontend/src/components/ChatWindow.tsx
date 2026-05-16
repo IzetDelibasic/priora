@@ -29,15 +29,19 @@ export function ChatWindow() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Priora AI Agent</h1>
-        <button className={styles.clearBtn} onClick={clearChat} title="Obriši razgovor">
-          Novi razgovor
+        <button
+          className={styles.clearBtn}
+          onClick={clearChat}
+          title="Clear conversation"
+        >
+          New conversation
         </button>
       </div>
 
       <div className={styles.messages}>
         {messages.length === 0 && (
           <p className={styles.placeholder}>
-            Započni razgovor — pitaj me bilo šta!
+            Start a conversation — ask me anything!
           </p>
         )}
         {messages.map((msg, i) => (
@@ -47,7 +51,9 @@ export function ChatWindow() {
         {isLoading && (
           <div className={styles.loadingWrapper}>
             <div className={styles.loadingDots}>
-              <span /><span /><span />
+              <span />
+              <span />
+              <span />
             </div>
           </div>
         )}
@@ -61,7 +67,7 @@ export function ChatWindow() {
         <textarea
           className={styles.input}
           rows={2}
-          placeholder="Napiši poruku... (Enter za slanje, Shift+Enter za novi red)"
+          placeholder="Type a message... (Enter to send, Shift+Enter for new line)"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -72,7 +78,7 @@ export function ChatWindow() {
           onClick={handleSend}
           disabled={isLoading || !input.trim()}
         >
-          Pošalji
+          Send
         </button>
       </div>
     </div>

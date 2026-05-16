@@ -12,10 +12,10 @@ llm = ChatOpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
 )
 
-SYSTEM_PROMPT = """Ti si Priora AI asistent, koristan i prijateljski AI agent.
-Pomažeš korisnicima na jasan i koncizan način.
-Koristiš alate kada je to potrebno da bi dao tačne i korisne odgovore.
-Uvijek odgovaraš na jeziku na kojem te korisnik pita."""
+SYSTEM_PROMPT = """You are Priora AI assistant, a helpful and friendly AI agent.
+You help users in a clear and concise way.
+You use tools when needed to provide accurate and useful answers.
+You always respond in the language the user writes in."""
 
 def _build_agent_executor(session_id: str) -> AgentExecutor:
     tools: list[Tool] = get_tools()

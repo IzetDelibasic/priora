@@ -19,15 +19,20 @@ export function useChat() {
 
       try {
         const response = await sendMessage(content, sessionId);
-        const assistantMsg: ChatMessage = { role: "assistant", content: response };
+        const assistantMsg: ChatMessage = {
+          role: "assistant",
+          content: response,
+        };
         setMessages((prev) => [...prev, assistantMsg]);
       } catch {
-        setError("Greška pri komunikaciji sa serverom. Provjeri da li je backend pokrenut.");
+        setError(
+          "Failed to communicate with the server. Make sure the backend is running.",
+        );
       } finally {
         setIsLoading(false);
       }
     },
-    [sessionId, isLoading]
+    [sessionId, isLoading],
   );
 
   const clearChat = useCallback(() => {

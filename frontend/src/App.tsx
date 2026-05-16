@@ -1,8 +1,8 @@
-import { ChatWindow } from './components/ChatWindow'
-import './App.css'
+import { ChatWindow } from "./components/ChatWindow";
+import "./App.css";
 
 function App() {
-  return <ChatWindow />
+  return <ChatWindow />;
 }
 
-export default App
+export default App;

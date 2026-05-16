@@ -18,7 +18,7 @@ class ChatResponse(BaseModel):
 @router.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     if not request.message.strip():
-        raise HTTPException(status_code=400, detail="Poruka ne može biti prazna")
+        raise HTTPException(status_code=400, detail="Message cannot be empty")
 
     try:
         response = await get_agent_response(
@@ -27,4 +27,4 @@ async def chat(request: ChatRequest):
         )
         return ChatResponse(response=response, session_id=request.session_id)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Greška agenta: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Agent error: {str(e)}")
