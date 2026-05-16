@@ -23,7 +23,12 @@ export interface TriageResponse {
   recommendation: string;
 }
 
-export async function submitTriage(data: TriageRequest): Promise<TriageResponse> {
-  const { data: result } = await axios.post<TriageResponse>(`${API_BASE}/triage`, data);
+export async function submitTriage(
+  data: TriageRequest,
+): Promise<TriageResponse> {
+  const { data: result } = await axios.post<TriageResponse>(
+    `${API_BASE}/triage`,
+    data,
+  );
   return result;
 }

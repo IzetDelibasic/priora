@@ -35,11 +35,18 @@ export function ChatWindow() {
             <Bot className="h-4 w-4 text-indigo-600" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-slate-900">Priora AI Assistant</p>
+            <p className="text-sm font-semibold text-slate-900">
+              Priora AI Assistant
+            </p>
             <p className="text-xs text-green-500 font-medium">● Online</p>
           </div>
         </div>
-        <Button variant="ghost" size="sm" onClick={clearChat} className="gap-1.5 text-slate-500">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={clearChat}
+          className="gap-1.5 text-slate-500"
+        >
           <RotateCcw className="h-3.5 w-3.5" />
           New chat
         </Button>
@@ -51,8 +58,13 @@ export function ChatWindow() {
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100">
               <Bot className="h-7 w-7 text-indigo-600" />
             </div>
-            <p className="text-slate-900 font-semibold">How can I help you today?</p>
-            <p className="text-slate-400 text-sm max-w-xs">Ask me anything about symptoms, triage levels, or medical guidance.</p>
+            <p className="text-slate-900 font-semibold">
+              How can I help you today?
+            </p>
+            <p className="text-slate-400 text-sm max-w-xs">
+              Ask me anything about symptoms, triage levels, or medical
+              guidance.
+            </p>
           </div>
         )}
         {messages.map((msg, i) => (
@@ -68,7 +80,9 @@ export function ChatWindow() {
         )}
 
         {error && (
-          <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2 mt-2">{error}</p>
+          <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2 mt-2">
+            {error}
+          </p>
         )}
 
         <div ref={bottomRef} />
@@ -94,7 +108,9 @@ export function ChatWindow() {
             <SendHorizontal className="h-4 w-4" />
           </Button>
         </div>
-        <p className="text-xs text-slate-400 mt-1.5">Enter to send · Shift+Enter for new line</p>
+        <p className="text-xs text-slate-400 mt-1.5">
+          Enter to send · Shift+Enter for new line
+        </p>
       </div>
     </div>
   );
