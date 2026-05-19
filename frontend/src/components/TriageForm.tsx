@@ -10,6 +10,7 @@ import type { TriageRequest, TriageResponse } from "@/models/triage";
 import { VitalField } from "./triage/VitalField";
 import { HelpPanel } from "./triage/HelpPanel";
 import { TriageResult } from "./triage/TriageResult";
+import { TriageResultSkeleton } from "./triage/TriageResultSkeleton";
 import { PainSlider } from "./triage/PainSlider";
 import { ChiefComplaintSelect } from "./triage/ChiefComplaintSelect";
 
@@ -219,7 +220,11 @@ export function TriageForm() {
         </div>
       )}
 
-      {result && <TriageResult result={result} onPrint={handlePrint} />}
+      {isLoading && <TriageResultSkeleton />}
+
+      {result && !isLoading && (
+        <TriageResult result={result} onPrint={handlePrint} />
+      )}
     </div>
   );
 }

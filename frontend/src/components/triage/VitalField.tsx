@@ -68,8 +68,11 @@ export function VitalField({
         name={name}
         value={focused ? draft : String(value)}
         onChange={(e) => {
-          setDraft(e.target.value);
-          fireChange(e.target.value, e);
+          const filtered = e.target.value
+            .replace(/[^0-9.]/g, "")
+            .replace(/(\..*)\./g, "$1");
+          setDraft(filtered);
+          fireChange(filtered, e);
         }}
         onFocus={(e) => {
           setDraft(String(value));
@@ -78,17 +81,15 @@ export function VitalField({
         }}
         onBlur={(e) => {
           setFocused(false);
-          const parsed = parseFloat(draft);
-          if (!isNaN(parsed)) {
-            const evt = {
-              ...e,
-              target: { ...e.target, name, value: String(parsed) },
-            };
-            onChange(evt as React.ChangeEvent<HTMLInputElement>);
-          } else {
-            const evt = { ...e, target: { ...e.target, name, value: "0" } };
-            onChange(evt as React.ChangeEvent<HTMLInputElement>);
-          }
+          let parsed = parseFloat(draft);
+          if (isNaN(parsed)) parsed = min ?? 0;
+          if (min !== undefined && parsed < min) parsed = min;
+          if (max !== undefined && parsed > max) parsed = max;
+          const evt = {
+            ...e,
+            target: { ...e.target, name, value: String(parsed) },
+          };
+          onChange(evt as React.ChangeEvent<HTMLInputElement>);
         }}
         min={min}
         max={max}
@@ -99,6 +100,15 @@ export function VitalField({
           status === "normal" && "border-green-400 focus:ring-green-400",
         )}
       />
+      {(min !== undefined || max !== undefined) && (
+        <p className="text-[10px] text-slate-400 leading-none">
+          {min !== undefined && max !== undefined
+            ? `${min} – ${max}`
+            : min !== undefined
+              ? `min ${min}`
+              : `max ${max}`}
+        </p>
+      )}
     </div>
   );
 }

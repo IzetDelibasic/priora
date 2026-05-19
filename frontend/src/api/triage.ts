@@ -3,7 +3,7 @@ import type { TriageRequest, TriageResponse } from "@/models/triage";
 
 export type { TriageRequest, TriageResponse };
 
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export async function submitTriage(
   data: TriageRequest,
