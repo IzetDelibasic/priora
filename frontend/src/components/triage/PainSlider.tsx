@@ -6,12 +6,12 @@ interface PainSliderProps {
 }
 
 const PAIN_LABELS: Record<number, string> = {
-  0: "None",
-  2: "Mild",
-  4: "Moderate",
-  6: "Significant",
-  8: "Severe",
-  10: "Worst",
+  0: "Nema bola",
+  2: "Blagi",
+  4: "Umjereni",
+  6: "Značajni",
+  8: "Jaki",
+  10: "Najjači",
 };
 
 function getPainColor(v: number): string {
@@ -39,18 +39,18 @@ export function PainSlider({ value, onChange }: PainSliderProps) {
   const label =
     PAIN_LABELS[value] ??
     (value <= 3
-      ? "Mild"
+      ? "Blagi"
       : value <= 5
-        ? "Moderate"
+        ? "Umjereni"
         : value <= 7
-          ? "Significant"
-          : "Severe");
+          ? "Značajni"
+          : "Jaki");
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between h-5">
         <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider leading-none">
-          Pain Scale
+          Skala bola
         </label>
         <div
           className={cn(

@@ -40,13 +40,13 @@ export function TriageResult({ result, onPrint }: TriageResultProps) {
             </div>
           </div>
           <Badge variant="outline" className="shrink-0 font-semibold">
-            {result.confidence}% confidence
+            {result.confidence}% pouzdanost
           </Badge>
         </div>
 
         <div className="space-y-2 pt-1">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-            Probability Distribution
+            Raspodjela vjerovatnoće
           </p>
           {Object.entries(result.probabilities).map(([level, pct]) => {
             const c = ESI_CONFIG[Number(level)];
@@ -85,7 +85,7 @@ export function TriageResult({ result, onPrint }: TriageResultProps) {
             onClick={onPrint}
           >
             <Printer className="h-4 w-4" />
-            Print / PDF Report
+            Štampaj / PDF izvještaj
           </Button>
         </div>
       </CardContent>

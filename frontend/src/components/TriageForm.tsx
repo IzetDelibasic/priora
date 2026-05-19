@@ -35,7 +35,7 @@ export function TriageForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.chiefcomplaint) {
-      setError("Please select a chief complaint before assessing.");
+      setError("Molimo odaberite glavnu pritužbu prije procjene.");
       return;
     }
     setIsLoading(true);
@@ -46,7 +46,7 @@ export function TriageForm() {
       setResult(res);
     } catch {
       setError(
-        "Failed to assess triage. Make sure the backend is running and the model is trained.",
+        "Greška pri procjeni trijaže. Provjerite da li je backend pokrenut i model obučen.",
       );
     } finally {
       setIsLoading(false);
@@ -77,10 +77,10 @@ export function TriageForm() {
         </div>
         <div>
           <h1 className="text-xl font-bold text-slate-900">
-            Triage Assessment
+            Trijažna procjena
           </h1>
           <p className="text-slate-500 text-sm">
-            Enter patient vitals to determine ESI triage level
+            Unesite vitalne znake pacijenta za određivanje ESI trijaž nivoa
           </p>
         </div>
       </div>
@@ -88,12 +88,12 @@ export function TriageForm() {
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle>Patient Vitals</CardTitle>
+            <CardTitle>Vitalni znaci pacijenta</CardTitle>
             <button
               type="button"
               onClick={() => setShowHelp((v) => !v)}
               className="text-slate-400 hover:text-indigo-600 transition-colors"
-              aria-label="Field descriptions"
+              aria-label="Opisi polja"
             >
               {showHelp ? (
                 <X className="h-5 w-5" />
@@ -108,11 +108,11 @@ export function TriageForm() {
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                <User className="h-3.5 w-3.5" /> Patient Name
+                <User className="h-3.5 w-3.5" /> Ime pacijenta
               </label>
               <Input
                 type="text"
-                placeholder="Enter patient name..."
+                placeholder="Unesite ime pacijenta..."
                 value={patientName}
                 onChange={(e) => setPatientName(e.target.value)}
               />
@@ -120,7 +120,7 @@ export function TriageForm() {
 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               <VitalField
-                label="Age (years)"
+                label="Dob (godine)"
                 name="age"
                 value={form.age}
                 onChange={handleChange}
@@ -129,7 +129,7 @@ export function TriageForm() {
                 step={1}
               />
               <VitalField
-                label="Heart Rate (bpm)"
+                label="Puls (otkucaji/min)"
                 name="pulse"
                 value={form.pulse}
                 onChange={handleChange}
@@ -137,7 +137,7 @@ export function TriageForm() {
                 max={300}
               />
               <VitalField
-                label="Systolic BP"
+                label="Sistolički TA"
                 name="sbp"
                 value={form.sbp}
                 onChange={handleChange}
@@ -145,7 +145,7 @@ export function TriageForm() {
                 max={300}
               />
               <VitalField
-                label="Diastolic BP"
+                label="Dijastolički TA"
                 name="dbp"
                 value={form.dbp}
                 onChange={handleChange}
@@ -153,7 +153,7 @@ export function TriageForm() {
                 max={200}
               />
               <VitalField
-                label="Temperature (°C)"
+                label="Temperatura (°C)"
                 name="temperature"
                 value={form.temperature}
                 onChange={handleChange}
@@ -170,7 +170,7 @@ export function TriageForm() {
                 max={100}
               />
               <VitalField
-                label="Resp. Rate"
+                label="Frekvencija disanja"
                 name="resprate"
                 value={form.resprate}
                 onChange={handleChange}
@@ -186,7 +186,7 @@ export function TriageForm() {
 
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Chief Complaint
+                Glavna pritužba
                 <span className="text-red-500 ml-0.5">*</span>
               </label>
               <ChiefComplaintSelect
@@ -203,10 +203,10 @@ export function TriageForm() {
                 disabled={isLoading}
                 className="flex-1 sm:flex-none sm:px-8"
               >
-                {isLoading ? "Assessing..." : "Assess Triage"}
+                {isLoading ? "Procjenjivanje..." : "Procijeni trijažu"}
               </Button>
               <Button type="button" variant="outline" onClick={handleReset}>
-                Reset
+                Poništi
               </Button>
             </div>
           </form>

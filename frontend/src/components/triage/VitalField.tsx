@@ -103,7 +103,7 @@ export function VitalField({
       {(min !== undefined || max !== undefined) && (
         <p className="text-[10px] text-slate-400 leading-none">
           {min !== undefined && max !== undefined
-            ? `${min} – ${max}`
+            ? `${min} - ${max}`
             : min !== undefined
               ? `min ${min}`
               : `max ${max}`}

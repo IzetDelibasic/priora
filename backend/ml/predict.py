@@ -52,11 +52,11 @@ class TriageResult:
 
 
 RECOMMENDATIONS = {
-    1: "IMMEDIATE: Activate resuscitation team now. Patient requires life-saving intervention.",
-    2: "EMERGENT: Assign to treatment room immediately. Physician assessment within 10 minutes.",
-    3: "URGENT: Patient stable but needs multiple resources. Assessment within 30 minutes.",
-    4: "LESS URGENT: One resource needed. Assessment within 1-2 hours.",
-    5: "NON-URGENT: Routine care. Assessment within 2-4 hours or refer to primary care.",
+    1: "HITNO: Odmah aktivirati tim za reanimaciju. Pacijent zahtijeva intervenciju koja spašava život.",
+    2: "URGENTNO: Odmah rasporediti u sobu za liječenje. Pregled ljekara u roku od 10 minuta.",
+    3: "ŽURNO: Pacijent stabilan, ali treba više resursa. Pregled u roku od 30 minuta.",
+    4: "MANJE ŽURNO: Potreban jedan resurs. Pregled u roku od 1-2 sata.",
+    5: "NIJE URGENTNO: Rutinska njega. Pregled u roku od 2-4 sata ili uputiti u primarnu zdravstvenu zaštitu.",
 }
 
 

@@ -9,7 +9,7 @@ export const ESI_CONFIG: Record<number, EsiCfg> = {
     text: "text-red-700",
     bar: "bg-red-500",
     icon: <AlertTriangle className="h-5 w-5 text-red-600" />,
-    label: "Immediate",
+    label: "Hitno",
   },
   2: {
     bg: "bg-orange-50",
@@ -18,7 +18,7 @@ export const ESI_CONFIG: Record<number, EsiCfg> = {
     text: "text-orange-700",
     bar: "bg-orange-500",
     icon: <AlertTriangle className="h-5 w-5 text-orange-500" />,
-    label: "Emergent",
+    label: "Urgentno",
   },
   3: {
     bg: "bg-yellow-50",
@@ -27,7 +27,7 @@ export const ESI_CONFIG: Record<number, EsiCfg> = {
     text: "text-yellow-700",
     bar: "bg-yellow-400",
     icon: <Activity className="h-5 w-5 text-yellow-600" />,
-    label: "Urgent",
+    label: "Žurno",
   },
   4: {
     bg: "bg-green-50",
@@ -36,7 +36,7 @@ export const ESI_CONFIG: Record<number, EsiCfg> = {
     text: "text-green-700",
     bar: "bg-green-500",
     icon: <CheckCircle className="h-5 w-5 text-green-600" />,
-    label: "Semi-urgent",
+    label: "Polu-urgentno",
   },
   5: {
     bg: "bg-blue-50",
@@ -45,6 +45,6 @@ export const ESI_CONFIG: Record<number, EsiCfg> = {
     text: "text-blue-700",
     bar: "bg-blue-400",
     icon: <Info className="h-5 w-5 text-blue-500" />,
-    label: "Non-urgent",
+    label: "Nije urgentno",
   },
 };

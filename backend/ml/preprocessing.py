@@ -24,11 +24,11 @@ CATEGORICAL_FEATURES = [
 TARGET = "esi"
 
 ESI_LABELS = {
-    1: "Resuscitation - Immediate life-saving intervention required",
-    2: "Emergent - High risk, should not wait",
-    3: "Urgent - Stable but requires multiple resources",
-    4: "Less Urgent - One resource needed",
-    5: "Non-Urgent - No resources needed",
+    1: "Reanimacija - Potrebna hitna intervencija za spašavanje života",
+    2: "Urgentno - Visoki rizik, ne smije čekati",
+    3: "Žurno - Stabilan, ali zahtijeva više resursa",
+    4: "Manje žurno - Potreban jedan resurs",
+    5: "Nije urgentno - Nisu potrebni resursi",
 }
 
 ESI_COLORS = {
