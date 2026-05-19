@@ -22,6 +22,8 @@ export function TriageForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Generic handler for all numeric vital input fields.
+  // parseFloat falls back to 0 for empty/invalid strings.
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -32,6 +34,8 @@ export function TriageForm() {
     }));
   };
 
+  // Validates that a chief complaint has been selected before sending the
+  // request, then calls the triage API and stores the result or error.
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.chiefcomplaint) {
@@ -40,6 +44,7 @@ export function TriageForm() {
     }
     setIsLoading(true);
     setError(null);
+    // Clear previous result so the skeleton is shown during the new request.
     setResult(null);
     try {
       const res = await submitTriage(form);
@@ -53,6 +58,7 @@ export function TriageForm() {
     }
   };
 
+  // Resets all form fields, result and error back to their initial state.
   const handleReset = () => {
     setForm(DEFAULT_FORM);
     setResult(null);
@@ -60,6 +66,8 @@ export function TriageForm() {
     setPatientName("");
   };
 
+  // Builds the print HTML from the current form/result and opens it in a new
+  // tab so the user can print or save as PDF without leaving the app.
   const handlePrint = () => {
     if (!result) return;
     const html = buildPrintHtml(patientName, form, result);

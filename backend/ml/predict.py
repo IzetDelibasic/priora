@@ -13,10 +13,16 @@ from ml.preprocessing import (
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "triage_model.joblib")
 
+# Module-level cache so the model is loaded from disk only once per process.
 _model = None
 
 
 def _load_model():
+    """Load the trained pipeline from disk, caching it after the first call.
+
+    Raises FileNotFoundError if the model file has not been created yet —
+    the caller should run ml.train to generate it.
+    """
     global _model
     if _model is None:
         if not os.path.exists(MODEL_PATH):
@@ -61,8 +67,18 @@ RECOMMENDATIONS = {
 
 
 def predict_triage(input_data: TriageInput) -> TriageResult:
+    """Run the trained XGBoost pipeline on a single patient record.
+
+    Steps:
+    1. Build a one-row DataFrame matching the feature schema used at training.
+    2. Call model.predict to get the ESI class (0-indexed internally, 1-5 externally).
+    3. Call model.predict_proba to get per-class probabilities.
+    4. Round probabilities to one decimal place and find the confidence (max prob).
+    5. Return a TriageResult with the ESI level, label, recommendation and probs.
+    """
     model = _load_model()
 
+    # Chief complaint must be lowercase/stripped to match training encoding.
     row = {
         "age": input_data.age,
         "pulse": input_data.pulse,
@@ -77,10 +93,13 @@ def predict_triage(input_data: TriageInput) -> TriageResult:
 
     df = pd.DataFrame([row])
 
+    # Model outputs class indices 0-4; add 1 to get the ESI level 1-5.
     esi_pred = int(model.predict(df)[0]) + 1
     proba = model.predict_proba(df)[0]
 
+    # Convert raw probabilities (0-1) to percentage rounded to 1 decimal.
     probabilities = {i + 1: round(float(p) * 100, 1) for i, p in enumerate(proba)}
+    # Confidence = probability of the predicted class.
     confidence = round(float(np.max(proba)) * 100, 1)
 
     return TriageResult(

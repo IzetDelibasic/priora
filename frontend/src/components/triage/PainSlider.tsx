@@ -5,6 +5,7 @@ interface PainSliderProps {
   onChange: (value: number) => void;
 }
 
+// Labels shown at fixed breakpoints on the pain scale (0-10).
 const PAIN_LABELS: Record<number, string> = {
   0: "Nema bola",
   2: "Blagi",
@@ -14,6 +15,7 @@ const PAIN_LABELS: Record<number, string> = {
   10: "Najjači",
 };
 
+// Returns a Tailwind text colour class based on pain severity.
 function getPainColor(v: number): string {
   if (v === 0) return "text-slate-400";
   if (v <= 3) return "text-green-600";
@@ -22,6 +24,7 @@ function getPainColor(v: number): string {
   return "text-red-600";
 }
 
+// Returns background + border classes for the severity badge.
 function getPainBg(v: number): string {
   if (v === 0) return "bg-slate-100 border-slate-200";
   if (v <= 3) return "bg-green-50 border-green-200";
@@ -30,6 +33,8 @@ function getPainBg(v: number): string {
   return "bg-red-50 border-red-200";
 }
 
+// Builds an inline CSS gradient for the slider track that fills green→red
+// proportionally to the current value (0-10).
 function getTrackGradient(v: number): string {
   const pct = (v / 10) * 100;
   return `linear-gradient(to right, #22c55e 0%, #eab308 40%, #f97316 65%, #ef4444 100%) 0 0 / ${pct}% 100% no-repeat, #e2e8f0`;

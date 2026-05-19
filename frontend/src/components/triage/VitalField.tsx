@@ -24,12 +24,17 @@ export function VitalField({
   max,
   step = 0.1,
 }: VitalFieldProps) {
+  // Tracks whether the input is currently focused so we can show the raw
+  // draft string instead of the committed numeric value while typing.
   const [focused, setFocused] = useState(false);
   const [draft, setDraft] = useState("");
 
+  // Resolve the clinical status (normal / warning / critical) for this vital.
   const status: VitalStatus | null = getVitalStatus(name, value);
   const statusCfg = status ? VITAL_STATUS_CFG[status] : null;
 
+  // Builds a synthetic change event with the parsed numeric value and forwards
+  // it to the parent handler. Skips the update when the string cannot be parsed.
   const fireChange = (raw: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const parsed = raw === "" ? 0 : parseFloat(raw);
     if (!isNaN(parsed)) {
@@ -68,6 +73,8 @@ export function VitalField({
         name={name}
         value={focused ? draft : String(value)}
         onChange={(e) => {
+          // Strip any non-numeric characters while typing.
+          // The second replace prevents more than one decimal point.
           const filtered = e.target.value
             .replace(/[^0-9.]/g, "")
             .replace(/(\..*)\./g, "$1");
@@ -75,11 +82,15 @@ export function VitalField({
           fireChange(filtered, e);
         }}
         onFocus={(e) => {
+          // When focused, populate draft with the current committed value
+          // and select all text for easy overwrite.
           setDraft(String(value));
           setFocused(true);
           requestAnimationFrame(() => e.target.select());
         }}
         onBlur={(e) => {
+          // On blur, clamp the entered value to [min, max] bounds.
+          // Falls back to min (or 0) when the draft is not a valid number.
           setFocused(false);
           let parsed = parseFloat(draft);
           if (isNaN(parsed)) parsed = min ?? 0;
