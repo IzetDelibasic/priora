@@ -1,13 +1,3 @@
-"""
-Run this script once to train and save the triage model.
-
-Usage:
-    1. Download dataset from Kaggle:
-       https://www.kaggle.com/datasets/maalona/hospital-triage-and-patient-history-data
-    2. Place 'triage.csv' in backend/ml/data/
-    3. Run: python -m ml.train
-"""
-
 import os
 import joblib
 import pandas as pd
@@ -18,7 +8,6 @@ from xgboost import XGBClassifier
 
 from ml.preprocessing import (
     build_preprocessor,
-    clean_dataset,
     NUMERIC_FEATURES,
     CATEGORICAL_FEATURES,
     TARGET,
@@ -33,9 +22,6 @@ def train():
     df = pd.read_csv(DATA_PATH, low_memory=False)
     print(f"  Raw rows: {len(df):,}")
 
-    print("Cleaning dataset...")
-    df = clean_dataset(df)
-    print(f"  Clean rows: {len(df):,}")
     print(f"  ESI distribution:\n{df[TARGET].value_counts().sort_index()}")
 
     X = df[NUMERIC_FEATURES + CATEGORICAL_FEATURES]

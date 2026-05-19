@@ -1,7 +1,6 @@
 import pandas as pd
-import numpy as np
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
@@ -25,11 +24,11 @@ CATEGORICAL_FEATURES = [
 TARGET = "esi"
 
 ESI_LABELS = {
-    1: "Resuscitation — Immediate life-saving intervention required",
-    2: "Emergent — High risk, should not wait",
-    3: "Urgent — Stable but requires multiple resources",
-    4: "Less Urgent — One resource needed",
-    5: "Non-Urgent — No resources needed",
+    1: "Resuscitation - Immediate life-saving intervention required",
+    2: "Emergent - High risk, should not wait",
+    3: "Urgent - Stable but requires multiple resources",
+    4: "Less Urgent - One resource needed",
+    5: "Non-Urgent - No resources needed",
 }
 
 ESI_COLORS = {

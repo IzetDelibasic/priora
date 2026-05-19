@@ -29,3 +29,7 @@ build/
 # IDE
 .vscode/
 .idea/
+
+# ML data and trained model (generated locally)
+ml/data/
+ml/triage_model.joblib

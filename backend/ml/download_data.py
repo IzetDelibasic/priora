@@ -1,17 +1,3 @@
-"""
-Downloads the triage dataset from Kaggle automatically.
-
-Setup (one-time):
-    1. Go to https://www.kaggle.com/settings → API → "Create New Token"
-    2. This downloads kaggle.json — place it at: C:/Users/<YOU>/.kaggle/kaggle.json
-       OR set environment variables in your .env file:
-       KAGGLE_USERNAME=your_username
-       KAGGLE_KEY=your_api_key
-
-Usage:
-    python -m ml.download_data
-"""
-
 import os
 import zipfile
 from pathlib import Path
@@ -29,7 +15,7 @@ def download():
 
     target = DATA_DIR / CSV_NAME
     if target.exists():
-        print(f"Dataset already exists at {target} — skipping download.")
+        print(f"Dataset already exists at {target} - skipping download.")
         return
 
     kaggle_username = os.getenv("KAGGLE_USERNAME")

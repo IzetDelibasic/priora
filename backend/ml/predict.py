@@ -3,7 +3,6 @@ import joblib
 import pandas as pd
 import numpy as np
 from dataclasses import dataclass
-from typing import Optional
 
 from ml.preprocessing import (
     NUMERIC_FEATURES,
