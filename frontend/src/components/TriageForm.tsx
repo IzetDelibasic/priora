@@ -1,89 +1,21 @@
 import { useState } from "react";
-import {
-  submitTriage,
-  type TriageRequest,
-  type TriageResponse,
-} from "../api/triage";
+import { submitTriage } from "../api/triage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { Activity, AlertTriangle, CheckCircle, Info } from "lucide-react";
-
-const ESI_CONFIG: Record<
-  number,
-  {
-    bg: string;
-    border: string;
-    badge: string;
-    text: string;
-    bar: string;
-    icon: React.ReactNode;
-    label: string;
-  }
-> = {
-  1: {
-    bg: "bg-red-50",
-    border: "border-red-300",
-    badge: "bg-red-600 text-white",
-    text: "text-red-700",
-    bar: "bg-red-500",
-    icon: <AlertTriangle className="h-5 w-5 text-red-600" />,
-    label: "Immediate",
-  },
-  2: {
-    bg: "bg-orange-50",
-    border: "border-orange-300",
-    badge: "bg-orange-500 text-white",
-    text: "text-orange-700",
-    bar: "bg-orange-500",
-    icon: <AlertTriangle className="h-5 w-5 text-orange-500" />,
-    label: "Emergent",
-  },
-  3: {
-    bg: "bg-yellow-50",
-    border: "border-yellow-300",
-    badge: "bg-yellow-500 text-white",
-    text: "text-yellow-700",
-    bar: "bg-yellow-400",
-    icon: <Activity className="h-5 w-5 text-yellow-600" />,
-    label: "Urgent",
-  },
-  4: {
-    bg: "bg-green-50",
-    border: "border-green-300",
-    badge: "bg-green-600 text-white",
-    text: "text-green-700",
-    bar: "bg-green-500",
-    icon: <CheckCircle className="h-5 w-5 text-green-600" />,
-    label: "Semi-urgent",
-  },
-  5: {
-    bg: "bg-blue-50",
-    border: "border-blue-300",
-    badge: "bg-blue-500 text-white",
-    text: "text-blue-700",
-    bar: "bg-blue-400",
-    icon: <Info className="h-5 w-5 text-blue-500" />,
-    label: "Non-urgent",
-  },
-};
-
-const DEFAULT_FORM: TriageRequest = {
-  age: 0,
-  pulse: 0,
-  sbp: 0,
-  dbp: 0,
-  temperature: 37.0,
-  spo2: 98,
-  resprate: 16,
-  pain: 0,
-  chiefcomplaint: "",
-};
+import { Activity, AlertTriangle, HelpCircle, User, X } from "lucide-react";
+import { DEFAULT_FORM } from "@/constants/vitals";
+import { buildPrintHtml } from "@/lib/print-report";
+import type { TriageRequest, TriageResponse } from "@/models/triage";
+import { VitalField } from "./triage/VitalField";
+import { HelpPanel } from "./triage/HelpPanel";
+import { TriageResult } from "./triage/TriageResult";
+import { PainSlider } from "./triage/PainSlider";
+import { ChiefComplaintSelect } from "./triage/ChiefComplaintSelect";
 
 export function TriageForm() {
+  const [patientName, setPatientName] = useState("");
+  const [showHelp, setShowHelp] = useState(false);
   const [form, setForm] = useState<TriageRequest>(DEFAULT_FORM);
   const [result, setResult] = useState<TriageResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -95,12 +27,16 @@ export function TriageForm() {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: name === "chiefcomplaint" ? value : parseFloat(value) || 0,
+      [name]: parseFloat(value) || 0,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.chiefcomplaint) {
+      setError("Please select a chief complaint before assessing.");
+      return;
+    }
     setIsLoading(true);
     setError(null);
     setResult(null);
@@ -120,10 +56,20 @@ export function TriageForm() {
     setForm(DEFAULT_FORM);
     setResult(null);
     setError(null);
+    setPatientName("");
+  };
+
+  const handlePrint = () => {
+    if (!result) return;
+    const html = buildPrintHtml(patientName, form, result);
+    const w = window.open("", "_blank", "width=800,height=900");
+    if (!w) return;
+    w.document.write(html);
+    w.document.close();
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 space-y-5">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-5">
       <div className="flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100">
           <Activity className="h-5 w-5 text-indigo-600" />
@@ -140,12 +86,39 @@ export function TriageForm() {
 
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle>Patient Vitals</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Patient Vitals</CardTitle>
+            <button
+              type="button"
+              onClick={() => setShowHelp((v) => !v)}
+              className="text-slate-400 hover:text-indigo-600 transition-colors"
+              aria-label="Field descriptions"
+            >
+              {showHelp ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <HelpCircle className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+          {showHelp && <HelpPanel />}
         </CardHeader>
         <CardContent>
           <form className="space-y-5" onSubmit={handleSubmit}>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                <User className="h-3.5 w-3.5" /> Patient Name
+              </label>
+              <Input
+                type="text"
+                placeholder="Enter patient name..."
+                value={patientName}
+                onChange={(e) => setPatientName(e.target.value)}
+              />
+            </div>
+
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <Field
+              <VitalField
                 label="Age (years)"
                 name="age"
                 value={form.age}
@@ -154,7 +127,7 @@ export function TriageForm() {
                 max={120}
                 step={1}
               />
-              <Field
+              <VitalField
                 label="Heart Rate (bpm)"
                 name="pulse"
                 value={form.pulse}
@@ -162,7 +135,7 @@ export function TriageForm() {
                 min={0}
                 max={300}
               />
-              <Field
+              <VitalField
                 label="Systolic BP"
                 name="sbp"
                 value={form.sbp}
@@ -170,7 +143,7 @@ export function TriageForm() {
                 min={0}
                 max={300}
               />
-              <Field
+              <VitalField
                 label="Diastolic BP"
                 name="dbp"
                 value={form.dbp}
@@ -178,7 +151,7 @@ export function TriageForm() {
                 min={0}
                 max={200}
               />
-              <Field
+              <VitalField
                 label="Temperature (°C)"
                 name="temperature"
                 value={form.temperature}
@@ -187,7 +160,7 @@ export function TriageForm() {
                 max={45}
                 step={0.1}
               />
-              <Field
+              <VitalField
                 label="SpO₂ (%)"
                 name="spo2"
                 value={form.spo2}
@@ -195,7 +168,7 @@ export function TriageForm() {
                 min={0}
                 max={100}
               />
-              <Field
+              <VitalField
                 label="Resp. Rate"
                 name="resprate"
                 value={form.resprate}
@@ -203,28 +176,23 @@ export function TriageForm() {
                 min={0}
                 max={60}
               />
-              <Field
-                label="Pain (0–10)"
-                name="pain"
-                value={form.pain}
-                onChange={handleChange}
-                min={0}
-                max={10}
-                step={1}
-              />
             </div>
+
+            <PainSlider
+              value={form.pain}
+              onChange={(v) => setForm((prev) => ({ ...prev, pain: v }))}
+            />
 
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Chief Complaint
+                <span className="text-red-500 ml-0.5">*</span>
               </label>
-              <Textarea
-                name="chiefcomplaint"
-                placeholder="e.g. chest pain, shortness of breath, altered consciousness..."
+              <ChiefComplaintSelect
                 value={form.chiefcomplaint}
-                onChange={handleChange}
-                rows={2}
-                required
+                onChange={(v) =>
+                  setForm((prev) => ({ ...prev, chiefcomplaint: v }))
+                }
               />
             </div>
 
@@ -251,113 +219,7 @@ export function TriageForm() {
         </div>
       )}
 
-      {result &&
-        (() => {
-          const cfg = ESI_CONFIG[result.esi_level];
-          return (
-            <Card className={cn("border-2", cfg.bg, cfg.border)}>
-              <CardContent className="pt-5 space-y-4">
-                <div className="flex flex-wrap items-start gap-3">
-                  <div className="flex items-center gap-3 flex-1">
-                    {cfg.icon}
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={cn(
-                            "rounded-full px-3 py-0.5 text-xs font-bold",
-                            cfg.badge,
-                          )}
-                        >
-                          ESI {result.esi_level}
-                        </span>
-                        <span className={cn("font-bold text-base", cfg.text)}>
-                          {result.label}
-                        </span>
-                      </div>
-                      <p className="text-slate-600 text-sm mt-1 leading-relaxed">
-                        {result.recommendation}
-                      </p>
-                    </div>
-                  </div>
-                  <Badge variant="outline" className="shrink-0 font-semibold">
-                    {result.confidence}% confidence
-                  </Badge>
-                </div>
-
-                <div className="space-y-2 pt-1">
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                    Probability Distribution
-                  </p>
-                  {Object.entries(result.probabilities).map(([level, pct]) => {
-                    const c = ESI_CONFIG[Number(level)];
-                    return (
-                      <div key={level} className="flex items-center gap-3">
-                        <span
-                          className={cn(
-                            "text-xs font-medium w-6 text-center rounded py-0.5",
-                            c.badge,
-                          )}
-                        >
-                          {level}
-                        </span>
-                        <div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
-                          <div
-                            className={cn(
-                              "h-2 rounded-full transition-all duration-500",
-                              c.bar,
-                            )}
-                            style={{ width: `${pct}%` }}
-                          />
-                        </div>
-                        <span className="text-xs text-slate-500 w-10 text-right font-medium">
-                          {pct}%
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })()}
-    </div>
-  );
-}
-
-interface FieldProps {
-  label: string;
-  name: string;
-  value: number;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  min?: number;
-  max?: number;
-  step?: number;
-}
-
-function Field({
-  label,
-  name,
-  value,
-  onChange,
-  min,
-  max,
-  step = 0.1,
-}: FieldProps) {
-  return (
-    <div className="space-y-1">
-      <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-        {label}
-      </label>
-      <Input
-        type="number"
-        name={name}
-        value={value}
-        onChange={onChange}
-        min={min}
-        max={max}
-        step={step}
-        required
-      />
+      {result && <TriageResult result={result} onPrint={handlePrint} />}
     </div>
   );
 }
