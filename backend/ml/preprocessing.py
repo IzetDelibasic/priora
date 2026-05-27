@@ -14,7 +14,6 @@ NUMERIC_FEATURES = [
     "temperature",
     "spo2",
     "resprate",
-    "pain",
 ]
 
 CATEGORICAL_FEATURES = [

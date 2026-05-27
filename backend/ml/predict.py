@@ -24,7 +24,7 @@ def _load_model():
         if not os.path.exists(MODEL_PATH):
             raise FileNotFoundError(
                 f"Trained model not found at {MODEL_PATH}. "
-                "Run 'python -m ml.train' first."
+                "Run 'python -m ml.train_real' first."
             )
         _model = joblib.load(MODEL_PATH)
     return _model
@@ -39,7 +39,6 @@ class TriageInput:
     temperature: float
     spo2: float
     resprate: float
-    pain: float
     chiefcomplaint: str
 
 
@@ -74,7 +73,6 @@ def predict_triage(input_data: TriageInput) -> TriageResult:
         "temperature": input_data.temperature,
         "spo2": input_data.spo2,
         "resprate": input_data.resprate,
-        "pain": input_data.pain,
         "chiefcomplaint": input_data.chiefcomplaint.lower().strip(),
     }
 

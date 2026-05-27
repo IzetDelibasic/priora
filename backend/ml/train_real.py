@@ -34,6 +34,9 @@ def build_preprocessor():
 
 
 def extract_chief_complaint(df):
+    # The dataset encodes chief complaints as binary one-hot columns (cc_*).
+    # Find the first column with value 1 per row and convert the column name
+    # to a human-readable string (strip prefix, replace dashes/underscores with spaces).
     cc_cols = [c for c in df.columns if c.startswith("cc_")]
     cc_df = df[cc_cols].apply(pd.to_numeric, errors="coerce").fillna(0).astype(int)
     mask = cc_df == 1
@@ -55,14 +58,15 @@ def load_and_prepare():
     print(f"  Raw rows: {len(df):,}")
 
     result = pd.DataFrame(index=df.index)
+    # Map raw dataset column names to the feature names used by the model.
     result["age"] = pd.to_numeric(df["age"], errors="coerce")
-    result["pulse"] = pd.to_numeric(df["triage_vital_hr"], errors="coerce")
-    result["sbp"] = pd.to_numeric(df["triage_vital_sbp"], errors="coerce")
-    result["dbp"] = pd.to_numeric(df["triage_vital_dbp"], errors="coerce")
+    result["pulse"] = pd.to_numeric(df["triage_vital_hr"], errors="coerce")    # heart rate
+    result["sbp"] = pd.to_numeric(df["triage_vital_sbp"], errors="coerce")    # systolic BP
+    result["dbp"] = pd.to_numeric(df["triage_vital_dbp"], errors="coerce")    # diastolic BP
     temp_f = pd.to_numeric(df["triage_vital_temp"], errors="coerce")
-    result["temperature"] = (temp_f - 32) * 5 / 9
-    result["spo2"] = pd.to_numeric(df["triage_vital_o2"], errors="coerce")
-    result["resprate"] = pd.to_numeric(df["triage_vital_rr"], errors="coerce")
+    result["temperature"] = (temp_f - 32) * 5 / 9                            # °F → °C
+    result["spo2"] = pd.to_numeric(df["triage_vital_o2"], errors="coerce")   # oxygen sat
+    result["resprate"] = pd.to_numeric(df["triage_vital_rr"], errors="coerce") # resp rate
 
     print("  Extracting chief complaints from binary flags...")
     result["chiefcomplaint"] = extract_chief_complaint(df)

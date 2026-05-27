@@ -14,7 +14,6 @@ class TriageRequest(BaseModel):
     temperature: float = Field(..., ge=30.0, le=45.0, description="Body temperature in Celsius")
     spo2: float = Field(..., ge=0, le=100, description="Oxygen saturation %")
     resprate: float = Field(..., ge=0, le=60, description="Respiratory rate breaths/min")
-    pain: float = Field(..., ge=0, le=10, description="Pain scale 0-10")
     chiefcomplaint: str = Field(..., min_length=1, description="Main symptom or complaint")
 
 
@@ -38,7 +37,6 @@ async def triage(request: TriageRequest):
             temperature=request.temperature,
             spo2=request.spo2,
             resprate=request.resprate,
-            pain=request.pain,
             chiefcomplaint=request.chiefcomplaint,
         ))
         return TriageResponse(
